@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-100 dark:bg-[#070b14]" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>National Airfare Intelligence Command Center | Faresense</title>
+<!-- Tailwind CSS CDN with forms and container plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0b1329',
+              slate: '#111827',
+              accent: '#f43f5e',
+              primary: '#4f46e5',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Core Layout Styles -->
+<style data-purpose="base-typography">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+  </style>
+<!-- Custom scrollbars & graph helpers -->
+<style data-purpose="custom-ui-helpers">
+    /* Custom Scrollbar for sidebar and containers */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.4);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.8);
+    }
+
+    /* Collapsible Sidebar Styles */
+    #leftSidebar {
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #leftSidebar.collapsed {
+      width: 4.75rem; /* ~76px */
+    }
+    #leftSidebar.collapsed .sidebar-text,
+    #leftSidebar.collapsed .sidebar-header-details,
+    #leftSidebar.collapsed .sidebar-section-title,
+    #leftSidebar.collapsed .sidebar-widget-full {
+      display: none !important;
+    }
+    #leftSidebar.collapsed .sidebar-widget-mini {
+      display: flex !important;
+    }
+    #leftSidebar.collapsed .sidebar-link {
+      justify-content: center;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    #leftSidebar.collapsed .sidebar-link svg {
+      margin-right: 0;
+    }
+    #leftSidebar.collapsed #sidebarToggleBtn svg {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="h-full flex overflow-hidden text-slate-800 dark:text-slate-100 antialiased bg-slate-100 dark:bg-[#070b14]">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-72 bg-[#0b1329] text-slate-300 flex flex-col flex-shrink-0 h-full border-r border-slate-800 dark:border-slate-800/80 overflow-y-auto overflow-x-hidden select-none relative z-40" data-purpose="sidebar-navigation" id="leftSidebar">
+<!-- Brand / Title Section -->
+<div class="px-4 py-4 border-b border-slate-800/80 flex items-center justify-between">
+<div class="flex items-center space-x-3 overflow-hidden">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4f46e5] to-[#4338ca] flex items-center justify-center text-white font-bold shadow-md shadow-indigo-950/60 flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M21 7l-5.5 1.5-3.5-3.5 1-.5-2.5-.5-1.5 2.5-3 .8-2.5-1.8-1 .5 1.8 2.5-.3 2.5L2 13.5l1.5.5 2.5-1 3.5.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path></svg>
+</div>
+<div class="sidebar-header-details whitespace-nowrap overflow-hidden">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-base tracking-tight text-white">Faresence</span>
+<span class="px-1.5 py-0.5 text-[9px] font-extrabold uppercase rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">APIx</span>
+</div>
+<p class="text-[10px] text-slate-400 font-medium leading-tight mt-0.5">National Airfare Intelligence</p>
+</div>
+</div>
+<!-- Sidebar Collapse/Expand Toggle Button -->
+<button aria-label="Toggle Sidebar Navigation" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition flex-shrink-0 focus:outline-none" id="sidebarToggleBtn" title="Collapse/Expand sidebar">
+<svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M11 19l-7-7 7-7m8 14l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- Navigation Groups -->
+<div class="p-3 space-y-5 flex-1 text-xs">
+<!-- OVERVIEW GROUP -->
+<div>
+<span class="sidebar-section-title text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2 block mb-1.5">OVERVIEW</span>
+<nav class="space-y-1">
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg bg-indigo-600/20 text-indigo-300 font-semibold border border-indigo-500/30 transition" href="#" title="Dashboard">
+<svg class="w-4 h-4 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Dashboard</span>
+</a>
+</nav>
+</div>
+<!-- INTELLIGENCE GROUP -->
+<div>
+<span class="sidebar-section-title text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2 block mb-1.5">INTELLIGENCE</span>
+<nav class="space-y-1">
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition font-medium" href="#" title="Airfare Index">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Airfare Index</span>
+</a>
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition font-medium" href="#" title="Routes">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Routes</span>
+</a>
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition font-medium" href="#" title="Airlines">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Airlines</span>
+</a>
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition font-medium" href="#" title="Booking Windows">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Booking Windows</span>
+</a>
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition font-medium" href="#" title="Heatmap">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Heatmap</span>
+</a>
+</nav>
+</div>
+<!-- ANALYTICS GROUP -->
+<div>
+<span class="sidebar-section-title text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2 block mb-1.5">ANALYTICS</span>
+<nav class="space-y-1">
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition font-medium" href="#" title="Forecast">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Forecast</span>
+</a>
+<a class="sidebar-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition font-medium" href="#" title="Anomalies">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="sidebar-text truncate">Anomalies</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Live Data Collection Mini Widget (Shown only when collapsed) -->
+<div class="sidebar-widget-mini hidden justify-center p-2 mb-3">
+<div class="w-10 h-10 rounded-xl bg-[#0f172a] border border-amber-500/30 flex items-center justify-center text-amber-400 relative" title="Live Data Collection: 7 channels | Paused">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" fill-rule="evenodd"></path></svg>
+<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse absolute -top-0.5 -right-0.5"></span>
+</div>
+</div>
+<!-- Live Data Collection Card (Image 3 bottom widget) -->
+<div class="sidebar-widget-full p-3.5 mx-3 mb-3 bg-[#0f172a]/90 rounded-xl border border-slate-800/90 text-xs space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" fill-rule="evenodd"></path></svg>
+        Live Data Collection
+      </span>
+<span class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+        Paused
+      </span>
+</div>
+<div class="space-y-1 text-[11px] text-slate-400 pt-1 border-t border-slate-800/60 font-mono">
+<div class="flex justify-between"><span class="">Sources</span><span class="text-slate-200 font-semibold">7 live channels</span></div>
+<div class="flex justify-between"><span class="">Quotes today</span><span class="text-slate-200 font-semibold">35,261</span></div>
+<div class="flex justify-between"><span class="">Last cycle</span><span class="text-slate-200 font-semibold">14s ago</span></div>
+</div>
+<div class="pt-1 text-[9px] text-slate-500 font-sans border-t border-slate-800/60 leading-tight">
+      v2.0 · MoSPI SIH26056 · ILO / UN CPI Std
+    </div>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContentArea -->
+<main class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50/70 dark:bg-[#070b14] transition-colors duration-300" data-purpose="primary-workspace">
+<!-- Top App Navigation / Status Bar -->
+<header class="bg-white dark:bg-[#0d1424] border-b border-slate-200/90 dark:border-slate-800/80 sticky top-0 z-30 shadow-sm transition-colors duration-300">
+<!-- Top Greeting & Action Bar -->
+<div class="px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800/60">
+<!-- Left Greeting & Title -->
+<div>
+<div class="flex items-center space-x-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-0.5">
+<span class="">Namaste!</span>
+<span class="text-slate-300 dark:text-slate-700">|</span>
+<span class="flex items-center gap-1 text-slate-700 dark:text-slate-300">Officer 🇮🇳</span>
+</div>
+<h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+        National Airfare Intelligence Command Center
+      </h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Measure, explain, forecast and simulate India's airfare-driven inflation.</p>
+</div>
+<!-- Right Live Status & Actions -->
+<div class="flex items-center flex-wrap gap-2.5 text-xs">
+<!-- Clock & Date Pills -->
+<div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-[#131b2e] border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 font-mono text-[11px]">
+<svg class="w-3.5 h-3.5 text-slate-400 dark:text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle><path d="M12 6v6l4 2" stroke-width="2"></path></svg>
+<span class="">22:04:41 IST</span>
+</div>
+<div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-[#131b2e] border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 text-[11px]">
+<svg class="w-3.5 h-3.5 text-slate-400 dark:text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"></path></svg>
+<span class="font-medium">Data as of 04 Sept 2026</span>
+</div>
+<!-- Search & Theme Buttons -->
+<button class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition" title="Search">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Interactive Theme Toggle Button -->
+<button aria-label="Toggle Color Theme" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-amber-400 transition" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+<!-- Sun icon (shown in dark mode) -->
+<svg class="w-4 h-4 hidden" fill="none" id="themeIconSun" stroke="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="5" stroke-width="2"></circle><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<!-- Moon icon (shown in light mode) -->
+<svg class="w-4 h-4" fill="none" id="themeIconMoon" stroke="currentColor" viewbox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Live Pill -->
+<div class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] tracking-wide">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="">LIVE</span>
+</div>
+<!-- Notification Bell with Unread Badge -->
+<div class="relative">
+<button class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">1</span>
+</div>
+<!-- API Access Button -->
+<button class="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-semibold text-xs rounded-lg shadow-sm flex items-center space-x-1.5 transition active:scale-[0.98]">
+<span class="font-mono text-indigo-200">&gt;_</span>
+<span class="">API Access</span>
+</button>
+<!-- User Profile Badge -->
+<div class="w-8 h-8 rounded-full bg-indigo-900 dark:bg-indigo-700 text-indigo-100 flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-indigo-200/50 dark:ring-indigo-500/30 cursor-pointer">
+        VS
+      </div>
+</div>
+</div>
+<!-- Live Alerts Banner Ticker (Image 3) -->
+<div class="px-6 py-2 bg-rose-50/60 dark:bg-rose-950/25 border-b border-rose-100 dark:border-rose-900/40 flex items-center justify-between text-xs">
+<div class="flex items-center space-x-3 text-slate-800 dark:text-slate-200 flex-wrap">
+<span class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-md bg-white dark:bg-rose-900/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 font-bold text-[11px]">
+<span class="">🔔</span>
+<span class="">1 active alert</span>
+</span>
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+<span class="font-bold text-rose-900 dark:text-rose-200">HIGH Alert: Severe Airfare Daily Spike</span>
+<span class="text-slate-400 dark:text-slate-600">·</span>
+<span class="text-slate-500 dark:text-slate-400 text-[11px]">9d ago</span>
+</div>
+</div>
+<a class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-[11px] flex items-center gap-1 hover:underline" href="#">
+<span class="">Alert center</span>
+<span class="">→</span>
+</a>
+</div>
+</header>
+<!-- Main Container Body -->
+<div class="p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
+<!-- Hero Header Panel -->
+<div class="bg-white dark:bg-[#11192e] rounded-xl px-4 py-2.5 border border-slate-200 dark:border-slate-800/80 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs transition-colors duration-300">
+<div class="flex items-center space-x-2.5 flex-wrap">
+<span class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="">Feed Live</span>
+</span>
+<span class="font-medium text-slate-700 dark:text-slate-300">
+<strong class="font-semibold text-slate-900 dark:text-white">Data Freshness:</strong> Last synchronized on <span class="font-mono text-slate-900 dark:text-slate-100 font-semibold">04 Sept 2026, 22:04:15 IST</span>
+</span>
+<span class="text-slate-300 dark:text-slate-700">•</span>
+<span class="text-slate-500 dark:text-slate-400">Automated DGCA Feed Cycle Active (15s latency)</span>
+</div>
+<div class="flex items-center space-x-3 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+<span class="flex items-center gap-1">
+<svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg> 18/18 Corridors Ingested
+    </span>
+</div>
+</div>
+<div class="bg-white dark:bg-[#11192e] rounded-xl p-4 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs transition-colors duration-300">
+<div class="flex items-center flex-wrap gap-2">
+<span class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">Filter Dimension:</span>
+<div class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700/60 p-0.5 bg-slate-50 dark:bg-[#18223c]">
+<button class="px-2.5 py-1 rounded-md bg-white dark:bg-[#222f52] text-indigo-700 dark:text-indigo-300 font-bold shadow-xs border border-slate-200/60 dark:border-transparent text-xs">National Basket</button>
+<button class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs">Corridor Specific</button>
+<button class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs">Carrier Share</button>
+</div>
+<div class="flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-slate-50 dark:bg-[#18223c] border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 font-medium">
+<span class="text-slate-400 dark:text-slate-400">Window:</span>
+<span class="">0-3 Days (Last Minute)</span>
+</div>
+</div>
+<div class="flex items-center space-x-2 text-slate-500 dark:text-slate-400 text-[11px]">
+<span class="">DGCA weight-averaged fare index input · Updated continuously</span>
+</div>
+</div>
+<!-- BEGIN: KpiCardsRow -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-purpose="kpi-metrics-grid">
+<!-- KPI 1: National Airfare Index (Gradient Card) -->
+<div class="rounded-xl p-5 bg-gradient-to-br from-[#535bf2] to-[#4338ca] text-white shadow-md shadow-indigo-200/40 dark:shadow-indigo-950/40 flex flex-col justify-between">
+<div>
+<div class="text-[11px] font-bold uppercase tracking-wider text-indigo-100/90">NATIONAL AIRFARE INDEX</div>
+<div class="mt-2 flex items-baseline space-x-1.5">
+<span class="text-3xl font-extrabold tracking-tight">123.28</span>
+<span class="text-sm font-medium text-indigo-200">points</span>
+</div>
+<div class="mt-2.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-400/30 text-white border border-indigo-300/30">
+                ▲ +23.28% vs Base
+              </span>
+</div>
+</div>
+<div class="mt-4 pt-2 text-[10px] text-indigo-200/80 border-t border-indigo-400/30">
+            Base Period: Jan 2024 = 100
+          </div>
+</div>
+<!-- KPI 2: Average Airfare -->
+<div class="rounded-xl p-5 bg-white dark:bg-[#11192e] border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col justify-between transition-colors duration-300">
+<div>
+<div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">AVERAGE AIRFARE</div>
+<div class="mt-2 flex items-baseline">
+<span class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">₹5,032</span>
+</div>
+<div class="mt-2.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60">
+                ▲ +5.4% vs prev week
+              </span>
+</div>
+</div>
+<div class="mt-4 pt-2 text-[10px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800/60">
+            Across monitored corridors
+          </div>
+</div>
+<!-- KPI 3: Airfare Inflation Pressure -->
+<div class="rounded-xl p-5 bg-white dark:bg-[#11192e] border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col justify-between transition-colors duration-300">
+<div>
+<div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">AIRFARE INFLATION PRESSURE</div>
+<div class="mt-2 flex items-baseline space-x-1">
+<span class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">64.9</span>
+<span class="text-slate-400 dark:text-slate-500 text-sm font-semibold">/ 100</span>
+</div>
+<div class="mt-2.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/60 tracking-wide uppercase">
+                Moderate Inflationary Pressure
+              </span>
+</div>
+</div>
+<div class="mt-4 pt-2 text-[10px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800/60">
+            Weighted composite risk scale
+          </div>
+</div>
+<!-- KPI 4: Data Trust Score -->
+<div class="rounded-xl p-5 bg-white dark:bg-[#11192e] border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-col justify-between transition-colors duration-300">
+<div>
+<div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">DATA TRUST SCORE</div>
+<div class="mt-2 flex items-baseline space-x-2">
+<span class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">95.1</span>
+<span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">EXCELLENT</span>
+</div>
+<div class="mt-2.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                Confidence: High (MoSPI Audit)
+              </span>
+</div>
+</div>
+<div class="mt-4 pt-2 text-[10px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800/60">
+            Coverage: 100% | Freshness: 100%
+          </div>
+</div>
+</section>
+<!-- END: KpiCardsRow -->
+<!-- BEGIN: MidSectionAnalytics -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6" data-purpose="analytics-and-route-intelligence">
+<!-- Left 8 Cols: Chart & Analytics Control -->
+<section class="lg:col-span-8 bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex flex-col transition-colors duration-300">
+<!-- Analytics Section Header -->
+<div class="flex items-center space-x-2 pb-3 border-b border-slate-100 dark:border-slate-800/60">
+<span class="text-xl">📊</span>
+<h2 class="text-base font-bold text-slate-900 dark:text-white">Airfare Trend &amp; Sensitivity Analytics</h2>
+</div>
+<!-- Tab Selection Radio Group -->
+<div class="py-3">
+<span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-2">Select Analytics View:</span>
+<div class="flex flex-wrap items-center gap-4 text-xs">
+<label class="flex items-center space-x-1.5 cursor-pointer font-semibold text-indigo-700 dark:text-indigo-400">
+<input checked="" class="w-3.5 h-3.5 text-indigo-600 bg-slate-100 dark:bg-slate-800 border-slate-400 dark:border-slate-600 focus:ring-0" name="chart_view" type="radio"/>
+<span class="">📈 Index vs. Time (Historical)</span>
+</label>
+<label class="flex items-center space-x-1.5 cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
+<input class="w-3.5 h-3.5 text-indigo-600 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-600 focus:ring-0" name="chart_view" type="radio"/>
+<span class="">🔀 Multi-Route Comparative Overlay</span>
+</label>
+<label class="flex items-center space-x-1.5 cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
+<input class="w-3.5 h-3.5 text-indigo-600 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-600 focus:ring-0" name="chart_view" type="radio"/>
+<span class="">⏳ Index vs. Lead Time (T-n)</span>
+</label>
+<label class="flex items-center space-x-1.5 cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
+<input class="w-3.5 h-3.5 text-indigo-600 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-600 focus:ring-0" name="chart_view" type="radio"/>
+<span class="">🔁 Route Price Relatives</span>
+</label>
+</div>
+</div>
+<!-- Chart Area Container -->
+<div class="mt-2 bg-slate-50/50 dark:bg-[#0d1424] rounded-lg p-3 border border-slate-100 dark:border-slate-800/80 flex-1 flex flex-col justify-between relative transition-colors duration-300">
+<div class="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 px-2">
+<span class="font-medium text-slate-600 dark:text-slate-300">National Airfare Index Trajectory &amp; Moving Baseline</span>
+<div class="flex items-center space-x-4 text-[11px]">
+<span class="flex items-center space-x-1.5">
+<span class="w-3 h-0.5 bg-indigo-600 dark:bg-indigo-400 inline-block"></span>
+<span class="">Daily Index</span>
+</span>
+<span class="flex items-center space-x-1.5">
+<span class="w-3 h-0.5 border-t-2 border-dashed border-slate-400 dark:border-slate-500 inline-block"></span>
+<span class="">Baseline Trend</span>
+</span>
+</div>
+</div>
+<!-- SVG Vector Chart Mock matching the dashboard index trajectory -->
+<div class="h-64 w-full mt-2 relative">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 700 240">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#6366f1" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Horizontal Reference Grid Lines -->
+<line class="stroke-slate-200 dark:stroke-slate-800" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="680" y1="30" y2="30"></line>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="34">140</text>
+<line class="stroke-slate-200 dark:stroke-slate-800" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="680" y1="85" y2="85"></line>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="89">120</text>
+<line class="stroke-slate-200 dark:stroke-slate-800" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="680" y1="140" y2="140"></line>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="144">100</text>
+<line class="stroke-slate-300 dark:stroke-slate-700" stroke-width="1" x1="40" x2="680" y1="195" y2="195"></line>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="199">80</text>
+<!-- Baseline Trend Dotted Curve -->
+<path class="stroke-slate-400 dark:stroke-slate-600" d="M 40 140 C 180 138, 360 137, 680 132" fill="none" stroke-dasharray="4 4" stroke-width="1.5"></path>
+<!-- Filled Gradient Area Under Curve -->
+<path d="M 40 140 C 130 138, 220 134, 300 136 C 400 140, 500 131, 580 128 C 620 126, 650 122, 680 120 L 680 195 L 40 195 Z" fill="url(#chartGradient)"></path>
+<!-- Actual Index Solid Line Trajectory -->
+<path class="stroke-indigo-600 dark:stroke-indigo-400" d="M 40 140 C 130 138, 220 134, 300 136 C 400 140, 500 131, 580 128 C 620 126, 650 122, 680 120" fill="none" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Data point nodes -->
+<circle class="hover:r-5 cursor-pointer fill-indigo-600 dark:fill-indigo-400" cx="40" cy="140" r="3.5"></circle>
+<circle class="fill-indigo-600 dark:fill-indigo-400" cx="168" cy="137" r="3.5"></circle>
+<circle class="fill-indigo-600 dark:fill-indigo-400" cx="296" cy="136" r="3.5"></circle>
+<circle class="fill-indigo-600 dark:fill-indigo-400" cx="424" cy="134" r="3.5"></circle>
+<circle class="fill-indigo-600 dark:fill-indigo-400" cx="552" cy="129" r="3.5"></circle>
+<circle class="fill-indigo-700 dark:fill-indigo-300 stroke-white dark:stroke-slate-900" cx="680" cy="120" r="4" stroke-width="2"></circle>
+<!-- Tooltip Badge Mock at latest data point -->
+<g transform="translate(620, 75)">
+<rect class="fill-slate-900 dark:fill-indigo-950 stroke-slate-700/50" height="24" opacity="0.95" rx="4" width="60"></rect>
+<text fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle" x="30" y="16">123.28 pt</text>
+</g>
+</svg>
+</div>
+<!-- X-Axis Timeline Labels -->
+<div class="flex justify-between text-[10px] text-slate-400 dark:text-slate-500 pt-2 px-6 border-t border-slate-200/60 dark:border-slate-800 font-mono">
+<span class="">00:00<br/>Sep 18, 2026</span>
+<span class="">12:00<br/>Sep 19, 2026</span>
+<span class="">00:00<br/>Sep 20, 2026</span>
+<span class="">12:00<br/>Sep 21, 2026</span>
+<span class="">00:00<br/>Sep 22, 2026</span>
+<span class="">12:00<br/>Sep 23, 2026</span>
+</div>
+</div>
+</section>
+<!-- Right 4 Cols: Route Intelligence & Alerts -->
+<section class="lg:col-span-4 flex flex-col space-y-4">
+<div class="bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex-1 flex flex-col transition-colors duration-300">
+<!-- Header -->
+<div class="flex items-center space-x-2 pb-3 border-b border-slate-100 dark:border-slate-800/60 mb-4">
+<span class="text-amber-500 text-lg">⚡</span>
+<h2 class="text-base font-bold text-slate-900 dark:text-white">Route Intelligence</h2>
+</div>
+<!-- Alert Card 1: Rising Corridor -->
+<div class="rounded-lg border-l-4 border-rose-500 bg-rose-50/70 dark:bg-rose-950/20 p-3.5 mb-3 border border-rose-100 dark:border-rose-900/40 transition hover:bg-rose-50 dark:hover:bg-rose-950/30">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-rose-800 dark:text-rose-300 flex items-center gap-1.5">
+<span class="">▲</span> Rising Corridor: DEL-BOM
+                </span>
+<span class="text-[10px] font-bold text-rose-600 dark:text-rose-300 bg-rose-100 dark:bg-rose-900/50 px-1.5 py-0.5 rounded">High Volatility</span>
+</div>
+<p class="text-xs text-rose-900 dark:text-rose-200 font-semibold mt-1">Relative: 126.71 pts</p>
+<p class="text-[11px] text-rose-700 dark:text-rose-400 mt-0.5">Airfare surge driven by high business demand &amp; peak slot occupancy.</p>
+</div>
+<!-- Alert Card 2: Softening Corridor -->
+<div class="rounded-lg border-l-4 border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/20 p-3.5 mb-3 border border-emerald-100 dark:border-emerald-900/40 transition hover:bg-emerald-50 dark:hover:bg-emerald-950/30">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+<span class="">▼</span> Softening Corridor: DEL-BLR
+                </span>
+<span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/50 px-1.5 py-0.5 rounded">Stabilizing</span>
+</div>
+<p class="text-xs text-emerald-900 dark:text-emerald-200 font-semibold mt-1">Relative: 118.42 pts</p>
+<p class="text-[11px] text-emerald-700 dark:text-emerald-400 mt-0.5">Capacity augmentation on sector suppressing fare inflation by 4.2%.</p>
+</div>
+<!-- Alert Card 3: Price Surge Alerts -->
+<div class="rounded-lg border border-amber-200 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20 p-3.5 mb-2">
+<div class="flex items-center space-x-1.5 text-xs font-bold text-amber-900 dark:text-amber-300">
+<span class="">⚠️</span>
+<span class="">Active Price Surge Alerts</span>
+</div>
+<div class="mt-2 text-xs text-amber-800 dark:text-amber-200 bg-amber-100/70 dark:bg-amber-900/40 rounded p-2 text-center font-medium">
+                No extreme price surges (&gt;2.0σ) detected.
+              </div>
+</div>
+<!-- Additional Micro Statistics Widget -->
+<div class="mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/60 text-[11px] text-slate-500 dark:text-slate-400 flex justify-between">
+<span class="">Monitored Metro Corridors: <strong class="text-slate-800 dark:text-slate-200">18</strong></span>
+<span class="">Anomalies: <strong class="text-emerald-600 dark:text-emerald-400">0 critical</strong></span>
+</div>
+</div>
+</section>
+</div>
+<!-- END: MidSectionAnalytics -->
+<!-- BEGIN: BottomSectionModules -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6" data-purpose="extended-analytics-grid">
+<!-- Corridor Inflation Matrix Heatmap (6 cols) -->
+<div class="lg:col-span-6 bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex flex-col justify-between transition-colors duration-300">
+<div>
+<div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/60 mb-3">
+<div class="flex items-center space-x-2">
+<span class="text-rose-500">🔥</span>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">Corridor Inflation Matrix</h3>
+</div>
+<span class="text-[11px] text-slate-400 dark:text-slate-500">Origin / Destination Heatmap</span>
+</div>
+<!-- Heatmap Grid Container -->
+<div class="overflow-x-auto mt-2">
+<table class="w-full text-xs text-center border-collapse">
+<thead>
+<tr class="text-slate-400 dark:text-slate-500 text-[10px] uppercase">
+<th class="p-2 text-left">Origin \ Dest</th>
+<th class="p-2">BOM</th>
+<th class="p-2">BLR</th>
+<th class="p-2">MAA</th>
+<th class="p-2">CCU</th>
+</tr>
+</thead>
+<tbody class="font-medium text-slate-800 dark:text-slate-200">
+<tr>
+<td class="p-2 text-left font-bold text-slate-600 dark:text-slate-300">DEL</td>
+<td class="p-2 bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 rounded font-semibold border border-white dark:border-slate-800/50">126.7 <span class="text-[9px] block text-rose-600 dark:text-rose-400">+14%</span></td>
+<td class="p-2 bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 rounded font-semibold border border-white dark:border-slate-800/50">118.4 <span class="text-[9px] block text-amber-600 dark:text-amber-400">+4%</span></td>
+<td class="p-2 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 rounded font-semibold border border-white dark:border-slate-800/50">109.1 <span class="text-[9px] block text-emerald-600 dark:text-emerald-400">-1%</span></td>
+<td class="p-2 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 rounded font-semibold border border-white dark:border-slate-800/50">121.3 <span class="text-[9px] block text-rose-600 dark:text-rose-400">+8%</span></td>
+</tr>
+<tr>
+<td class="p-2 text-left font-bold text-slate-600 dark:text-slate-300">BOM</td>
+<td class="p-2 text-slate-300 dark:text-slate-600 font-normal">--</td>
+<td class="p-2 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 rounded font-semibold border border-white dark:border-slate-800/50">122.9 <span class="text-[9px] block text-rose-600 dark:text-rose-400">+9%</span></td>
+<td class="p-2 bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 rounded font-semibold border border-white dark:border-slate-800/50">114.3 <span class="text-[9px] block text-amber-600 dark:text-amber-400">+2%</span></td>
+<td class="p-2 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 rounded font-semibold border border-white dark:border-slate-800/50">107.5 <span class="text-[9px] block text-emerald-600 dark:text-emerald-400">-3%</span></td>
+</tr>
+<tr>
+<td class="p-2 text-left font-bold text-slate-600 dark:text-slate-300">BLR</td>
+<td class="p-2 bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 rounded font-semibold border border-white dark:border-slate-800/50">116.2 <span class="text-[9px] block text-amber-600 dark:text-amber-400">+3%</span></td>
+<td class="p-2 text-slate-300 dark:text-slate-600 font-normal">--</td>
+<td class="p-2 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 rounded font-semibold border border-white dark:border-slate-800/50">104.2 <span class="text-[9px] block text-emerald-600 dark:text-emerald-400">-6%</span></td>
+<td class="p-2 bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 rounded font-semibold border border-white dark:border-slate-800/50">117.8 <span class="text-[9px] block text-amber-600 dark:text-amber-400">+5%</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footnote / Status Pill -->
+<div class="mt-3 p-2 bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 rounded text-[11px] text-blue-700 dark:text-blue-300 flex items-center space-x-2">
+<svg class="w-4 h-4 flex-shrink-0 text-blue-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Insufficient origin/destination airport data for remote island zones. Core trunk routes calibrated.</span>
+</div>
+</div>
+<!-- Carrier Pricing Share Donut Chart (6 cols) -->
+<div class="lg:col-span-6 bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex flex-col justify-between transition-colors duration-300">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/60">
+<div class="flex items-center space-x-2">
+<span class="text-blue-500">✈️</span>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">Carrier Pricing Share</h3>
+</div>
+<span class="text-[11px] text-slate-400 dark:text-slate-500">Scraped Flight Inventory Share</span>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6 py-4">
+<!-- SVG Donut Chart -->
+<div class="w-36 h-36 relative flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<!-- IndiGo 55% (#3b82f6) -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#3b82f6" stroke-dasharray="55 45" stroke-dashoffset="0" stroke-width="5"></circle>
+<!-- Air India 22% (#ec4899) -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#ec4899" stroke-dasharray="22 78" stroke-dashoffset="-55" stroke-width="5"></circle>
+<!-- Vistara 12% (#a855f7) -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#a855f7" stroke-dasharray="12 88" stroke-dashoffset="-77" stroke-width="5"></circle>
+<!-- Akasa 6% (#f97316) -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#f97316" stroke-dasharray="6 94" stroke-dashoffset="-89" stroke-width="5"></circle>
+<!-- SpiceJet 5% (#10b981) -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#10b981" stroke-dasharray="5 95" stroke-dashoffset="-95" stroke-width="5"></circle>
+</svg>
+<div class="absolute text-center">
+<span class="text-xs text-slate-400 uppercase font-semibold">Total</span>
+<span class="block text-sm font-extrabold text-slate-800 dark:text-white leading-none">100%</span>
+</div>
+</div>
+<!-- Donut Legend Details -->
+<div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+<span class="text-slate-600 dark:text-slate-300 font-medium">IndiGo (55.0%)</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+<span class="text-slate-600 dark:text-slate-300 font-medium">Air India (22.0%)</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+<span class="text-slate-600 dark:text-slate-300 font-medium">Vistara (12.5%)</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+<span class="text-slate-600 dark:text-slate-300 font-medium">Akasa Air (6.0%)</span>
+</div>
+<div class="flex items-center space-x-2 col-span-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+<span class="text-slate-600 dark:text-slate-300 font-medium">SpiceJet &amp; Others (4.5%)</span>
+</div>
+</div>
+</div>
+<p class="text-[10px] text-slate-400 dark:text-slate-500 text-center border-t border-slate-100 dark:border-slate-800/60 pt-2">Inventory weighted for standard economy bookings within 14-day window.</p>
+</div>
+</section>
+<!-- END: BottomSectionModules -->
+<!-- BEGIN: TablesAndExportSection -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6" data-purpose="corridor-table-and-report-export">
+<!-- Corridor Price Relatives Table (8 cols) -->
+<div class="lg:col-span-8 bg-[#0b1329] rounded-xl border border-slate-800 dark:border-slate-800/90 shadow-md p-5 text-slate-100">
+<div class="flex items-center space-x-2 pb-3 border-b border-slate-800 mb-3">
+<span class="text-rose-400">📌</span>
+<h3 class="text-sm font-bold text-white tracking-wide">Corridor Price Relatives Table</h3>
+</div>
+<!-- Structured Data Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead class="border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+<tr>
+<th class="py-2.5 px-3">Route</th>
+<th class="py-2.5 px-3">Price Relative</th>
+<th class="py-2.5 px-3 text-right">Avg Live Fare (P_t)</th>
+<th class="py-2.5 px-3 text-right">Inflation Impact</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-800/60 font-mono">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-800/40 transition">
+<td class="py-2.5 px-3 font-semibold text-white">DEL-BOM</td>
+<td class="py-2.5 px-3 text-rose-400 font-bold">126.71</td>
+<td class="py-2.5 px-3 text-right text-slate-200">₹5,983.34</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-block px-1.5 py-0.5 rounded bg-rose-950 text-rose-400 text-[10px] font-sans font-bold">+12.4% MoM</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-800/40 transition">
+<td class="py-2.5 px-3 font-semibold text-white">DEL-BLR</td>
+<td class="py-2.5 px-3 text-emerald-400 font-bold">118.42</td>
+<td class="py-2.5 px-3 text-right text-slate-200">₹5,184.24</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-block px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 text-[10px] font-sans font-bold">-2.1% MoM</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-800/40 transition">
+<td class="py-2.5 px-3 font-semibold text-white">BOM-MAA</td>
+<td class="py-2.5 px-3 text-amber-400 font-bold">114.28</td>
+<td class="py-2.5 px-3 text-right text-slate-200">₹4,342.10</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-block px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 text-[10px] font-sans font-bold">+3.2% MoM</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Executive Report Downloader Card (4 cols) -->
+<div class="lg:col-span-4 bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex flex-col justify-between transition-colors duration-300">
+<div>
+<div class="flex items-center space-x-2 pb-3 border-b border-slate-100 dark:border-slate-800/60">
+<span class="text-base">📑</span>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">Executive Report Downloader</h3>
+</div>
+<p class="text-xs text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
+              Download an executive summary PDF containing current MoSPI metrics and corridor breakdowns.
+            </p>
+<div class="mt-4 p-3 bg-slate-50 dark:bg-[#18223c] border border-slate-200 dark:border-slate-700/60 rounded-lg text-xs space-y-1.5 text-slate-500 dark:text-slate-400">
+<div class="flex justify-between">
+<span class="">Format:</span>
+<span class="font-medium text-slate-700 dark:text-slate-200">Audit-Ready PDF (A4)</span>
+</div>
+<div class="flex justify-between">
+<span class="">Timestamp:</span>
+<span class="font-medium text-slate-700 dark:text-slate-200">2026-09-23 12:00 IST</span>
+</div>
+<div class="flex justify-between">
+<span class="">Digital Signature:</span>
+<span class="font-medium text-emerald-600 dark:text-emerald-400 font-mono">Verified (SHA-256)</span>
+</div>
+</div>
+</div>
+<div class="mt-6">
+<button class="w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 transition shadow-sm">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Export Executive Bulletin</span>
+</button>
+</div>
+</div>
+</section>
+<!-- END: TablesAndExportSection -->
+<!-- Footer / Disclaimers -->
+<footer class="pt-4 pb-6 text-center text-xs text-slate-400 dark:text-slate-500 border-t border-slate-200 dark:border-slate-800/80">
+<p class="">© 2026 Faresense™ — Ministry of Statistics and Programme Implementation (MoSPI) Airfare Index Engine. All data validated via scheduled multi-corridor crawler nodes.</p>
+</footer>
+</div>
+</main>
+<!-- END: MainContentArea -->
+<!-- INTERACTIVE SCRIPTS: Collapsible Sidebar & Dark/Light Mode Toggle -->
+<script>
+  // 1. Collapsible Sidebar Functionality
+  const sidebar = document.getElementById('leftSidebar');
+  const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+
+  sidebarToggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    sidebarToggleBtn.setAttribute('title', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    sidebarToggleBtn.setAttribute('aria-expanded', !isCollapsed);
+  });
+
+  // 2. Full Dark/Light Mode Theme Toggle
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  const sunIcon = document.getElementById('themeIconSun');
+  const moonIcon = document.getElementById('themeIconMoon');
+
+  function updateThemeUI(isDark) {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      sunIcon.classList.remove('hidden');
+      moonIcon.classList.add('hidden');
+      themeToggleBtn.setAttribute('title', 'Switch to Light Mode');
+    } else {
+      document.documentElement.classList.remove('dark');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+      themeToggleBtn.setAttribute('title', 'Switch to Dark Mode');
+    }
+  }
+
+  // Check saved preference or default
+  const savedTheme = localStorage.getItem('faresense_theme');
+  if (savedTheme === 'dark') {
+    updateThemeUI(true);
+  } else {
+    updateThemeUI(false);
+  }
+
+  themeToggleBtn.addEventListener('click', () => {
+    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+    const newDark = !isCurrentlyDark;
+    updateThemeUI(newDark);
+    localStorage.setItem('faresense_theme', newDark ? 'dark' : 'light');
+  });
+</script>
+</body></html>

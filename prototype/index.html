@@ -20,20 +20,16 @@
             }
           },
           fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+            sans: ['Times New Roman', 'Times', 'serif'],
           }
         }
       }
     }
   </script>
-<!-- Google Fonts: Inter -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Core Layout Styles -->
 <style data-purpose="base-typography">
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Times New Roman', Times, serif;
       -webkit-font-smoothing: antialiased;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
@@ -82,6 +78,225 @@
     }
     #leftSidebar.collapsed #sidebarToggleBtn svg {
       transform: rotate(180deg);
+    }
+  </style>
+<!-- Command center visual system -->
+<style data-purpose="command-center-theme">
+    :root {
+      --ink: #173d4a;
+      --muted-ink: #587c8a;
+      --canvas: #2d7187;
+      --canvas-deep: #1d5f75;
+      --panel: #eaf5f8;
+      --panel-alt: #d9eef4;
+      --line: #9ac3d1;
+      --navy: #123a4f;
+      --blue: #2d7d95;
+      --blue-soft: #dfeff5;
+      --teal: #3ba7b8;
+      --teal-deep: #1e7a91;
+    }
+
+    html, body {
+      font-family: 'Times New Roman', Times, serif !important;
+      background: linear-gradient(180deg, var(--canvas) 0%, var(--canvas-deep) 100%) !important;
+      color: var(--ink) !important;
+    }
+
+    h1, h2, h3, h4, h5, h6,
+    .font-bold, .font-extrabold, .font-semibold {
+      font-family: 'Times New Roman', Times, serif !important;
+      font-weight: 700 !important;
+    }
+
+    #leftSidebar {
+      width: 16rem !important;
+      background: rgba(12, 39, 52, 0.96) !important;
+      color: #eaf5f8 !important;
+      border-color: rgba(141, 192, 205, 0.35) !important;
+    }
+
+    #leftSidebar .border-b,
+    #leftSidebar .border-slate-800\/80 {
+      border-color: #bfd5e2 !important;
+    }
+
+    #leftSidebar .text-white,
+    #leftSidebar .text-slate-300,
+    #leftSidebar .text-slate-400,
+    #leftSidebar .text-slate-500 {
+      color: #ffffff !important;
+    }
+
+    #leftSidebar .text-slate-500,
+    #leftSidebar .sidebar-section-title {
+      color: rgba(255, 255, 255, 0.72) !important;
+    }
+
+    #leftSidebar .sidebar-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      border-color: transparent !important;
+      border-radius: 0.35rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.01em;
+    }
+
+    #leftSidebar .sidebar-link:hover,
+    #leftSidebar .sidebar-link.bg-indigo-600\/20 {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #ffffff !important;
+      border-color: rgba(255,255,255,0.1) !important;
+    }
+
+    #leftSidebar .sidebar-link svg,
+    #leftSidebar .text-indigo-400,
+    #leftSidebar .text-indigo-300 {
+      color: #dfe8ff !important;
+    }
+
+    #leftSidebar .sidebar-widget-full {
+      background: #c7e8f2 !important;
+      border-color: #a9d5e4 !important;
+      color: var(--ink) !important;
+      border-radius: 0.45rem !important;
+    }
+
+    #leftSidebar .sidebar-widget-full .text-slate-400,
+    #leftSidebar .sidebar-widget-full .text-slate-500 {
+      color: #587183 !important;
+    }
+
+    #leftSidebar .sidebar-widget-full .text-slate-200,
+    #leftSidebar .sidebar-widget-full .text-slate-300 {
+      color: var(--ink) !important;
+    }
+
+    main {
+      background: var(--canvas) !important;
+    }
+
+    main > header {
+      background: var(--panel) !important;
+      border-color: var(--line) !important;
+      box-shadow: 0 1px 0 rgba(37, 83, 111, 0.04) !important;
+    }
+
+    main > header h1 {
+      color: var(--ink) !important;
+      letter-spacing: 0 !important;
+    }
+
+    main > header .text-slate-500,
+    main > header .text-slate-400 {
+      color: var(--muted-ink) !important;
+    }
+
+    main > header .bg-rose-50\/60 {
+      background: #fff8f8 !important;
+      border-color: #f1cfd4 !important;
+    }
+
+    .max-w-7xl {
+      max-width: 76rem !important;
+    }
+
+    .max-w-7xl > .rounded-xl,
+    [data-purpose="kpi-metrics-grid"] > div,
+    [data-purpose="analytics-and-route-intelligence"] > section,
+    [data-purpose="extended-analytics-grid"] > div,
+    [data-purpose="corridor-table-and-report-export"] > div {
+      border-radius: 0.2rem !important;
+      border-color: var(--line) !important;
+      box-shadow: 0 1px 3px rgba(29, 70, 94, 0.06) !important;
+    }
+
+    .max-w-7xl > .rounded-xl,
+    [data-purpose="kpi-metrics-grid"] > div:not(:first-child),
+    [data-purpose="analytics-and-route-intelligence"] > section,
+    [data-purpose="extended-analytics-grid"] > div,
+    [data-purpose="corridor-table-and-report-export"] > div:last-child {
+      background: #ffffff !important;
+    }
+
+    [data-purpose="kpi-metrics-grid"] > div:first-child {
+      background: #ffffff !important;
+      border-color: rgba(94, 78, 60, 0.18) !important;
+      box-shadow: 0 8px 18px rgba(27, 35, 42, 0.08) !important;
+    }
+
+    [data-purpose="kpi-metrics-grid"] > div:first-child .text-3xl,
+    [data-purpose="kpi-metrics-grid"] > div:first-child .text-sm {
+      color: var(--ink) !important;
+    }
+
+    [data-purpose="kpi-metrics-grid"] > div {
+      min-height: 9rem;
+    }
+
+    [data-purpose="kpi-metrics-grid"] .text-slate-900,
+    [data-purpose="kpi-metrics-grid"] .text-white,
+    [data-purpose="analytics-and-route-intelligence"] .text-slate-900,
+    [data-purpose="extended-analytics-grid"] .text-slate-900,
+    [data-purpose="corridor-table-and-report-export"] .text-slate-900 {
+      color: var(--ink) !important;
+    }
+
+    [data-purpose="analytics-and-route-intelligence"] .bg-slate-50\/50 {
+      background: #f4f9fb !important;
+      border-color: #d9e7ee !important;
+    }
+
+    [data-purpose="analytics-and-route-intelligence"] h2,
+    [data-purpose="extended-analytics-grid"] h3,
+    [data-purpose="corridor-table-and-report-export"] h3 {
+      color: var(--ink) !important;
+    }
+
+    [data-purpose="analytics-and-route-intelligence"] .text-indigo-700,
+    [data-purpose="analytics-and-route-intelligence"] .text-indigo-600,
+    [data-purpose="corridor-table-and-report-export"] .bg-indigo-600 {
+      color: #236887 !important;
+    }
+
+    [data-purpose="corridor-table-and-report-export"] > div:first-child {
+      background: #ffffff !important;
+      border-color: rgba(94, 78, 60, 0.18) !important;
+    }
+
+    [data-purpose="corridor-table-and-report-export"] > div:first-child .text-white,
+    [data-purpose="corridor-table-and-report-export"] > div:first-child .text-slate-100 {
+      color: var(--ink) !important;
+    }
+
+    button, a, input, th, td, p, span {
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    button, a {
+      transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    @media (max-width: 900px) {
+      #leftSidebar {
+        width: 4.75rem !important;
+      }
+
+      #leftSidebar .sidebar-text,
+      #leftSidebar .sidebar-header-details,
+      #leftSidebar .sidebar-section-title,
+      #leftSidebar .sidebar-widget-full {
+        display: none !important;
+      }
+
+      #leftSidebar .sidebar-link {
+        justify-content: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+
+      .max-w-7xl {
+        padding: 1rem !important;
+      }
     }
   </style>
 </head>
@@ -196,15 +411,10 @@
 <main class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50/70 dark:bg-[#070b14] transition-colors duration-300" data-purpose="primary-workspace">
 <!-- Top App Navigation / Status Bar -->
 <header class="bg-white dark:bg-[#0d1424] border-b border-slate-200/90 dark:border-slate-800/80 sticky top-0 z-30 shadow-sm transition-colors duration-300">
-<!-- Top Greeting & Action Bar -->
+<!-- Top Action Bar -->
 <div class="px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800/60">
-<!-- Left Greeting & Title -->
+<!-- Left Title -->
 <div>
-<div class="flex items-center space-x-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-0.5">
-<span class="">Namaste!</span>
-<span class="text-slate-300 dark:text-slate-700">|</span>
-<span class="flex items-center gap-1 text-slate-700 dark:text-slate-300">Officer 🇮🇳</span>
-</div>
 <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
         National Airfare Intelligence Command Center
       </h1>
@@ -276,9 +486,9 @@
 </div>
 </header>
 <!-- Main Container Body -->
-<div class="p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
+<div class="p-3 md:p-4 space-y-3 max-w-[100%] mx-auto w-full">
 <!-- Hero Header Panel -->
-<div class="bg-white dark:bg-[#11192e] rounded-xl px-4 py-2.5 border border-slate-200 dark:border-slate-800/80 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs transition-colors duration-300">
+<div class="bg-white dark:bg-[#11192e] rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-800/80 shadow-xs flex flex-wrap items-center justify-between gap-2 text-xs transition-colors duration-300">
 <div class="flex items-center space-x-2.5 flex-wrap">
 <span class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] tracking-wide uppercase">
 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -296,7 +506,7 @@
     </span>
 </div>
 </div>
-<div class="bg-white dark:bg-[#11192e] rounded-xl p-4 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs transition-colors duration-300">
+<div class="bg-white dark:bg-[#11192e] rounded-lg p-3 border border-slate-200 dark:border-slate-800/80 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs transition-colors duration-300">
 <div class="flex items-center flex-wrap gap-2">
 <span class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">Filter Dimension:</span>
 <div class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700/60 p-0.5 bg-slate-50 dark:bg-[#18223c]">
@@ -314,14 +524,14 @@
 </div>
 </div>
 <!-- BEGIN: KpiCardsRow -->
-<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-purpose="kpi-metrics-grid">
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" data-purpose="kpi-metrics-grid">
 <!-- KPI 1: National Airfare Index (Gradient Card) -->
-<div class="rounded-xl p-5 bg-gradient-to-br from-[#535bf2] to-[#4338ca] text-white shadow-md shadow-indigo-200/40 dark:shadow-indigo-950/40 flex flex-col justify-between">
+<div class="rounded-lg p-4 bg-gradient-to-br from-[#535bf2] to-[#4338ca] text-white shadow-md shadow-indigo-200/40 dark:shadow-indigo-950/40 flex flex-col justify-between">
 <div>
-<div class="text-[11px] font-bold uppercase tracking-wider text-indigo-100/90">NATIONAL AIRFARE INDEX</div>
-<div class="mt-2 flex items-baseline space-x-1.5">
-<span class="text-3xl font-extrabold tracking-tight">123.28</span>
-<span class="text-sm font-medium text-indigo-200">points</span>
+<div class="text-[12px] sm:text-[13px] font-black uppercase tracking-wider text-slate-900 whitespace-nowrap">NATIONAL AIRFARE INDEX</div>
+<div class="mt-2 flex items-end flex-wrap gap-x-2 leading-none max-w-full">
+<span class="text-[2.8rem] sm:text-[4.2rem] font-black tracking-[-0.06em] text-slate-900 leading-none">123.28</span>
+<span class="pb-2 text-lg sm:text-2xl font-medium text-slate-700 leading-none">points</span>
 </div>
 <div class="mt-2.5">
 <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-400/30 text-white border border-indigo-300/30">
@@ -329,7 +539,7 @@
               </span>
 </div>
 </div>
-<div class="mt-4 pt-2 text-[10px] text-indigo-200/80 border-t border-indigo-400/30">
+<div class="mt-4 pt-2 text-[10px] sm:text-[11px] font-black text-slate-900 border-t border-indigo-400/30 whitespace-nowrap">
             Base Period: Jan 2024 = 100
           </div>
 </div>
@@ -389,9 +599,9 @@
 </section>
 <!-- END: KpiCardsRow -->
 <!-- BEGIN: MidSectionAnalytics -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6" data-purpose="analytics-and-route-intelligence">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4" data-purpose="analytics-and-route-intelligence">
 <!-- Left 8 Cols: Chart & Analytics Control -->
-<section class="lg:col-span-8 bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex flex-col transition-colors duration-300">
+<section class="lg:col-span-8 bg-white dark:bg-[#11192e] rounded-lg border border-slate-200 dark:border-slate-800/80 shadow-sm p-4 flex flex-col transition-colors duration-300">
 <!-- Analytics Section Header -->
 <div class="flex items-center space-x-2 pb-3 border-b border-slate-100 dark:border-slate-800/60">
 <span class="text-xl">📊</span>
@@ -445,13 +655,13 @@
 </defs>
 <!-- Horizontal Reference Grid Lines -->
 <line class="stroke-slate-200 dark:stroke-slate-800" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="680" y1="30" y2="30"></line>
-<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="34">140</text>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="Times New Roman, Times, serif" font-size="10" x="15" y="34">140</text>
 <line class="stroke-slate-200 dark:stroke-slate-800" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="680" y1="85" y2="85"></line>
-<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="89">120</text>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="Times New Roman, Times, serif" font-size="10" x="15" y="89">120</text>
 <line class="stroke-slate-200 dark:stroke-slate-800" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="680" y1="140" y2="140"></line>
-<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="144">100</text>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="Times New Roman, Times, serif" font-size="10" x="15" y="144">100</text>
 <line class="stroke-slate-300 dark:stroke-slate-700" stroke-width="1" x1="40" x2="680" y1="195" y2="195"></line>
-<text class="fill-slate-400 dark:fill-slate-500" font-family="sans-serif" font-size="10" x="15" y="199">80</text>
+<text class="fill-slate-400 dark:fill-slate-500" font-family="Times New Roman, Times, serif" font-size="10" x="15" y="199">80</text>
 <!-- Baseline Trend Dotted Curve -->
 <path class="stroke-slate-400 dark:stroke-slate-600" d="M 40 140 C 180 138, 360 137, 680 132" fill="none" stroke-dasharray="4 4" stroke-width="1.5"></path>
 <!-- Filled Gradient Area Under Curve -->
@@ -485,7 +695,7 @@
 </section>
 <!-- Right 4 Cols: Route Intelligence & Alerts -->
 <section class="lg:col-span-4 flex flex-col space-y-4">
-<div class="bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex-1 flex flex-col transition-colors duration-300">
+<div class="bg-white dark:bg-[#11192e] rounded-lg border border-slate-200 dark:border-slate-800/80 shadow-sm p-4 flex-1 flex flex-col transition-colors duration-300">
 <!-- Header -->
 <div class="flex items-center space-x-2 pb-3 border-b border-slate-100 dark:border-slate-800/60 mb-4">
 <span class="text-amber-500 text-lg">⚡</span>
@@ -533,7 +743,7 @@
 </div>
 <!-- END: MidSectionAnalytics -->
 <!-- BEGIN: BottomSectionModules -->
-<section class="grid grid-cols-1 lg:grid-cols-12 gap-6" data-purpose="extended-analytics-grid">
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-4" data-purpose="extended-analytics-grid">
 <!-- Corridor Inflation Matrix Heatmap (6 cols) -->
 <div class="lg:col-span-6 bg-white dark:bg-[#11192e] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-5 flex flex-col justify-between transition-colors duration-300">
 <div>

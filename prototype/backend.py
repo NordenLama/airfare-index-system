@@ -59,6 +59,13 @@ try:
 except ImportError:
     fpdf_available = False
 
+# Import ML Forecaster Engine
+try:
+    from ml_forecaster import train_and_predict_forecast
+except ImportError:
+    from prototype.ml_forecaster import train_and_predict_forecast
+
+
 
 # -------------------------------------------------------------------
 # FastAPI App Initialization
@@ -454,6 +461,13 @@ def get_reports_data():
         "route_summary": route_summary,
         "airline_compliance": [{"airline": carrier, "coverage": "Complete", "status": "Compliant"} for carrier in CARRIERS],
     }
+
+@app.get("/api/predict-forecast")
+def predict_forecast(route: str = Query("DEL-BOM"), days: int = Query(30)):
+    quotes = _route_quotes(route)
+    forecast_result = train_and_predict_forecast(quotes, route=route, forecast_days=days)
+    return {"status": "success", "data": forecast_result, **forecast_result}
+
 
 if __name__ == "__main__":
     import uvicorn

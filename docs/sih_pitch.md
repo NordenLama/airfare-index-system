@@ -131,13 +131,9 @@ Delhi–Srinagar, Bengaluru–Pune, Delhi–Guwahati, Delhi–Patna.
     documented prototype cutoffs (CV 0.10 / 0.25), not derived from a
     large historical calibration.
 
-**Route inflation / heatmap**
-14. *Why show a heatmap at all — isn't the national number enough?* — The
-    national number hides geography; the heatmap answers "where," and
-    combined with traffic weight, "does it matter."
-15. *Why are some cells in the heatmap blank instead of zero?* — A route
-    with no data has an unknown inflation rate, not a zero one; treating
-    it as zero would fabricate a value.
+**Route Corridor Heatmap Analysis**
+14. *Why utilize a Route Corridor Heatmap instead of relying solely on the national aggregate?* — While the national average provides macroeconomic context, it obscures geographical volatility. The Route Corridor Heatmap isolates regional supply-demand imbalances, allowing stakeholders to pinpoint exact corridors experiencing critical surge pricing.
+15. *Why do certain cells in the Route Corridor Heatmap remain blank instead of defaulting to zero?* — Corridors lacking statistically significant data points reflect an unknown inflation rate, not a neutral (zero) one. Imputing zero would inject artificial stability and compromise the statistical integrity of the analysis.
 
 **Affordability**
 16. *Is this a real affordability measure?* — No — "Relative Airfare

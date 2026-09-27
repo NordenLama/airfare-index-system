@@ -1,6 +1,0 @@
-source,origin,destination,flight_date,airline,price,currency
-IndiGo,DEL,BOM,2026-10-15,6E-201,4500,INR
-Air India,DEL,BOM,2026-10-15,AI-805,4800,INR
-IndiGo,DEL,BLR,2026-10-15,6E-502,5200,INR
-Air India,DEL,BLR,2026-10-15,AI-503,5100,INR
-IndiGo,BOM,MAA,2026-10-15,6E-304,3900,INR

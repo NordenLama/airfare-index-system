@@ -10,11 +10,8 @@ from fastapi import FastAPI, Query, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, FileResponse
 from pydantic import BaseModel
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
 # -------------------------------------------------------------------
-
 # Path Configurations & Imports
 # -------------------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -66,6 +63,14 @@ try:
 except ImportError:
     from prototype.ml_forecaster import train_and_predict_forecast
 
+# Import Interactive Heatmap Engine
+try:
+    from heatmap_engine import generate_interactive_map
+except ImportError:
+    try:
+        from prototype.heatmap_engine import generate_interactive_map
+    except ImportError:
+        generate_interactive_map = None
 
 
 # -------------------------------------------------------------------
@@ -84,6 +89,20 @@ app.add_middleware(
 
 quote_store: dict[str, list[dict]] = {route: extract_live_fares(route) for route in ROUTES}
 last_extraction_at = datetime.datetime.now(datetime.timezone.utc)
+
+
+def _quote_source(quote: dict) -> Optional[str]:
+    source = quote.get("source") or quote.get("airline") or quote.get("surveillance_mode")
+    return str(source).strip() if source else None
+
+
+collection_sources = {
+    source
+    for quotes in quote_store.values()
+    for quote in quotes
+    if (source := _quote_source(quote))
+}
+total_quotes_collected = sum(len(quotes) for quotes in quote_store.values())
 
 
 def _route_quotes(route: str) -> list[dict]:
@@ -208,6 +227,20 @@ def get_filters():
         dates["max"] = str(fares_df['date_dt'].max())
 
     return {"airlines": airlines, "leads": leads, "dates": dates}
+
+
+@app.get("/api/heatmap-components")
+def get_heatmap_components():
+    """Generates and serves the Folium route corridor map HTML component"""
+    if generate_interactive_map is None:
+        return {"status": "error", "map_html": "<p style='color:red; text-align:center;'>heatmap_engine module not found</p>"}
+
+    try:
+        filtered_df = get_filtered_df()
+        map_html = generate_interactive_map(filtered_df)
+        return {"status": "success", "map_html": map_html}
+    except Exception as e:
+        return {"status": "error", "map_html": f"<p style='color:red; text-align:center;'>Error rendering map: {str(e)}</p>"}
 
 
 @app.get("/api/dashboard")
@@ -347,12 +380,14 @@ def trigger_scrape():
 @app.post("/api/trigger-scrape")
 def trigger_live_scrape(route: str = "DEL-BOM"):
     """Refresh one monitored route using the hybrid scraper."""
-    global last_extraction_at
+    global last_extraction_at, total_quotes_collected
     selected_route = route.upper()
     if selected_route not in ROUTES:
         raise HTTPException(status_code=400, detail=f"Unsupported route: {selected_route}")
     quotes = extract_live_fares(selected_route)
     quote_store[selected_route] = quotes
+    total_quotes_collected += len(quotes)
+    collection_sources.update(source for quote in quotes if (source := _quote_source(quote)))
     last_extraction_at = datetime.datetime.now(datetime.timezone.utc)
     return {
         "status": "success",
@@ -452,6 +487,8 @@ def get_surveillance_data():
         "extractor_status_pct": 100,
         "last_extraction": last_extraction_at.isoformat(),
         "quotes_collected_today": len(all_quotes),
+        "source_count": len(collection_sources),
+        "total_quotes_collected": total_quotes_collected,
         "data_freshness_score_pct": 99.8,
         "carrier_daemons": [
             {"name": "IndiGo Airlines", "status": "Active", "coverage_pct": 100},
@@ -861,14 +898,6 @@ def scraper_surveillance():
             {"name": "EaseMyTrip OTA", "type": "OTA Aggregator", "status": "Active", "daily_quotes": 11000, "latency_ms": 310},
         ]
     }
-
-
-@app.get("/api/export-pdf")
-def export_pdf():
-    from fastapi.responses import Response
-    content = b"%PDF-1.4 AirIndex India Airfare Price Index Report"
-    return Response(content=content, media_type="application/pdf",
-                    headers={"Content-Disposition": "attachment; filename=AirIndex_Report.pdf"})
 
 
 @app.get("/api/export-airindex-data")

@@ -91,3 +91,8 @@ def get_hub_network_impact(hub_code: str):
         "connected_routes_count": len(routes),
         "network_nodes": routes
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8001)

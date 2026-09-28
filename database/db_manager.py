@@ -4,10 +4,10 @@ import pandas as pd
 
 DB_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(DB_DIR, "airfare_index.db")
-SCHEMA_PATH = os.path.join(DB_DIR, "schema.sql")
+SCHEMA_PATH = os.path.join(DB_DIR, "init.sql")  # Changed from schema.sql to init.sql
 
 def init_db():
-    """Initializes SQLite database using database/schema.sql."""
+    """Initializes SQLite database using database/init.sql."""
     os.makedirs(DB_DIR, exist_ok=True)
     
     conn = sqlite3.connect(DB_PATH)

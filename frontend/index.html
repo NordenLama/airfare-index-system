@@ -1618,11 +1618,11 @@
     let dashboardApiBase = '';
     const _host = window.location.host;
     if (_host.includes('5500')) {
-      dashboardApiBase = window.location.protocol + '//' + _host.replace('5500', '8000');
+        dashboardApiBase = window.location.protocol + '//' + _host.replace('5500', '8000');
     } else if (_host.includes('5173')) {
-      dashboardApiBase = window.location.protocol + '//' + _host.replace('5173', '8000');
+        dashboardApiBase = window.location.protocol + '//' + _host.replace('5173', '8000');
     } else if (window.location.port === '5500') {
-      dashboardApiBase = window.location.protocol + '//' + window.location.hostname + ':8000';
+        dashboardApiBase = window.location.protocol + '//' + window.location.hostname + ':8000';
     }
     let currentActiveRoute = 'DEL-BOM';
     let indiaRouteMap;
@@ -3015,7 +3015,7 @@
         class="px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-600/30 transition active:scale-95 flex items-center gap-2 flex-shrink-0">
         <span>Send</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L32 12M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
         </svg>
       </button>
     </form>

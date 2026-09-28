@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 
-import data_quality as data_quality_mod
+from index_engine.data_quality import DataQualityEngine
 from index_engine.analytics import AirfareAnalytics
 from index_engine.utils import shift_period
 
@@ -36,6 +36,9 @@ def _period_bounds(observations: List[Dict[str, Any]]) -> tuple[str, str]:
     periods = data_access.available_periods(observations)
     if not periods:
         raise ValueError("No periods available in the loaded observation set.")
+    if len(periods) == 1:
+        # If only one period, use a fixed base period
+        return "2024-01", periods[0]
     return periods[0], periods[-1]
 
 
@@ -59,12 +62,9 @@ def get_analytics() -> Dict[str, Any]:
     result.traffic_weight_coverage = traffic_coverage
 
     payload = result.to_dict()
-    # Not part of AnalyticsResult.to_dict() upstream -- inflation_matrix()
-    # is a separate method on the result object (see index_engine.analytics
-    # .AnalyticsResult / route_analysis.inflation_matrix). Attached here so
-    # the one frontend that wants a heatmap doesn't need a second request.
-    payload["inflation_matrix_mom"] = _matrix_to_json(result.inflation_matrix(metric="mom"))
-    payload["inflation_matrix_yoy"] = _matrix_to_json(result.inflation_matrix(metric="yoy"))
+    # inflation_matrix() is a method on the engine, not the result
+    payload["inflation_matrix_mom"] = _matrix_to_json(engine.inflation_matrix(metric="mom"))
+    payload["inflation_matrix_yoy"] = _matrix_to_json(engine.inflation_matrix(metric="yoy"))
     return payload
 
 
@@ -118,8 +118,9 @@ def get_data_quality() -> Dict[str, Any]:
     """Full data_quality.DataQualityResult.to_dict() for whatever raw
     observations are on disk (see data_access.load_raw_observations)."""
     raw, _is_real = data_access.load_raw_observations()
-    result = data_quality_mod.validate_fare_batch(raw)
-    return result.to_dict()
+    engine = DataQualityEngine()
+    result = engine.assess_quality(raw)
+    return result.to_dict() if hasattr(result, 'to_dict') else result.__dict__
 
 
 def get_forecast() -> Dict[str, Any]:

@@ -1,6 +1,12 @@
 from __future__ import annotations
 
 import os
+import sys
+
+# Add repo root to Python path so index_engine can be imported
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
 
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI
@@ -33,7 +39,7 @@ app = FastAPI(
 
 # ── CORS ──────────────────────────────────────────────────────────
 
-frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
 
 app.add_middleware(
     CORSMiddleware,

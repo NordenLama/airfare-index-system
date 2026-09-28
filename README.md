@@ -35,6 +35,16 @@ airfare-index-system/
 
 ---
 
+## 🏛️ Government Data Export & Consumption
+
+The system exposes dedicated REST API endpoints for government regulatory bodies (like DGCA, Ministry of Civil Aviation) to ingest real-time airfare data and anomaly alerts clearly and securely:
+
+*   **Dedicated JSON Endpoint (`/api/export-apix-data?format=json`)**: A highly structured REST endpoint that outputs the National Airfare Index, route-specific anomalies, and surge alerts.
+*   **How the Govt consumes it**: Government systems or enterprise dashboards can poll this endpoint via standard HTTP `GET` requests (e.g., using `curl`, Python `requests`, or automated cron jobs) to feed into their own national dashboards or trigger regulatory alerts. 
+*   **Security & Validation**: This endpoint ensures that data is served in a standardized, machine-readable format (JSON) that complies with data interoperability standards, keeping raw scraping logic separate from government data ingestion pipelines.
+
+---
+
 ## 🛠️ Tech Stack
 
 *   **Backend:** Python, FastAPI, SQLite
@@ -45,7 +55,7 @@ airfare-index-system/
 
 ## ⚙️ Running the Prototype
 
-1.  **Install dependencies:**
+1.  **Install dependencies:** 
     ```bash
     pip install -r requirements.txt
     ```

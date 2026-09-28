@@ -32,6 +32,7 @@ except ImportError:
 
 # Import Flight Scraper
 try:
+    # pyrefly: ignore [missing-import]
     from scrapers.flight_scraper import scrape_and_persist_fares
 except ImportError:
     scrape_and_persist_fares = None

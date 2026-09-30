@@ -78,6 +78,18 @@ except ImportError:
 # -------------------------------------------------------------------
 app = FastAPI(title="AirIndex India - National Airfare Intelligence API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://airfare-index-system.vercel.app",  # Replace with your real Vercel URL
+        "http://localhost:8000",                     # For local testing
+        "http://127.0.0.1:5500",                    # VS Code Live Server (if used)
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Enable CORS for frontend integration
 app.add_middleware(
     CORSMiddleware,

@@ -748,7 +748,7 @@ def trigger_simulation():
 
 # ── Gemini AI Chatbot Integration ─────────────────────────────────────────────
 
-GEMINI_API_KEY = os.environ.get("AQ.Ab8RN6JOgWkkZXUMGPZONf7cWcwKnVtJ587T4xTTUd3vh9cGZgafe", "")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 
 AIRINDEX_SYSTEM_INSTRUCTION = """You are the **AirIndex AI Assistant** — a knowledgeable, polite, and concise project guide for the *AirIndex India – National Real-Time Airfare Price Index & ML Forecasting Portal*.
 

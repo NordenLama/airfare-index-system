@@ -695,48 +695,30 @@ try:
 except ImportError:
     pass
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "") or "AQ.Ab8RN6JOgWkkZXUMGPZONf7cWcwKnVtJ587T4xTTUd3vh9cGZg"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 
-FARESENSE_SYSTEM_INSTRUCTION = """You are the **Faresense AI Assistant** — a knowledgeable, polite, and concise project guide for the *Faresense – National Real-Time Airfare Price Index (APIx) & ML Forecasting Portal*.
+FARESENSE_SYSTEM_INSTRUCTION = """You are the AirIndex project assistant. Answer clearly and concisely using only facts supplied in this instruction or the user's message. Do not invent current fares, live dashboard metrics, model accuracy, source counts, index values, or future predictions. If information is missing or time-sensitive, say so and direct the user to the live dashboard. Distinguish this research prototype from an official CPI statistic.
 
-**Current Live Dashboard Metrics (Simulation Date: September 27, 2026):**
-- **National Airfare Price Index (APIx):** 156.69 (+23.28% vs Base Period 2024 = 100)
-- **Weighted Average Airfare:** ₹6,268 across 50 representative corridors
-- **Tariff Breakdown:** Pure Base Tariff 72% (~₹4,513) vs Taxes/UDF/GST 28% (~₹1,755)
-- **Observation Horizons (Purchase Lead-Time):**
-  * **T+1 Horizon (Immediate/Urgent):** 128.4 (+28.4% vs Base, Avg Tariff ₹7,850, High Surge Elasticity)
-  * **T+7 Horizon (Weekly/Standard):** 112.5 (+12.5% vs Base, Avg Tariff ₹6,100)
-  * **T+45 Horizon (Advance Purchase):** 96.5 (-3.5% vs Base, Avg Tariff ₹4,380, Base Baseline)
-- **Daily Trend:** 123.28 pt
+Verified project facts:
+- The airfare index is a prototype that compares representative route fares with a configurable base period. Its documented default uses the median fare per route and period, route price relatives, and normalized fixed route weights with arithmetic aggregation.
+- Synthetic route weights are illustrative demo data, not validated passenger-volume or expenditure weights. The prototype is not an official CPI sub-index.
+- Fare inputs are configurable. The documented standard is the total mandatory one-way fare for one adult, excluding optional add-ons.
+- The repository describes forecasting across booking horizons T+1 to T+45, using a RandomForestRegressor with a polynomial-regression fallback.
+- The system uses a Python/FastAPI backend and SQLite. Fare ingestion, route analysis, forecasts, data-quality checks, and API endpoints are implemented in the repository.
+- The UI has separate fare/tax breakdown and route-alert workflows; do not claim a fixed tax share or that every displayed value is live.
 
-**Predictive Fare & Index Volatility Calendar (for monitored corridor DEL-BOM, Base Fare ₹4,120):**
-- **Mid-October (e.g., October 21):** Falls squarely in the optimal T+24 booking window (T+15 to T+35 lowest fare trough). On **October 21**, the predicted index value is **94.8** (or ~95.0), corresponding to an estimated fare of **₹3,906** (a "Low Fare" deal, ~5.2% below base period fare).
-- **Late October (Oct 22 - Oct 31):** Festive surge (pre-Diwali travel corridor) with index spiking to **125.0 – 131.2** ("High Fare", estimated fares ₹5,150 – ₹5,400).
-- If the user asks for index values or estimated fares for specific dates, quote these values from the predictive calendar!
-
-**Project Context & Architecture:**
-- **Purpose:** High-frequency, real-time Airfare Price Index system built for MoSPI (Ministry of Statistics), RBI Monetary Policy (Transport CPI sub-group), and DGCA surveillance across 50+ representative city-pair trunk corridors.
-- **Scraper Engine:** Playwright-based hybrid scraper monitoring 11 airline portals and OTA aggregators with ethical rate-limiting (2s delay), robots.txt compliance, IP rotation, and header randomization.
-- **Backend:** Python FastAPI server with SQLite database for fare storage.
-- **ML Forecasting Engine:** RandomForestRegressor (scikit-learn) trained on historical scraped fares, predicting across T+1 to T+45 advance purchase horizons (R² ≈ 0.94, MAPE ≈ 1.12%).
-- **Dual-View System:** (1) Citizen Booking Advisory (shows best booking windows, lowest predicted fares, savings %). (2) Government Market Volatility Monitor (surge risk alerts, inflation pressure, threshold warnings).
-- **Citizen Alerts:** OTP-based phone authentication → subscribe to route price drop alerts → automated SMS notifications.
-- **Tax Separation:** Decomposes total fare into Pure Base Tariff (~72%) and Taxes/UDF/GST (~28%).
-- **Government API:** Dedicated `/api/export-apix-data?format=json` endpoint for DGCA/MoCA machine-readable ingestion.
-
-**Your Role:**
-- Answer questions from citizens, hackathon judges (SIH), regulators, and developers.
-- Answer user questions directly and concisely (2-4 sentences for simple queries, bullet points for multi-part questions).
-- Never give generic stock answers if the user asks a specific question about dates, index values, or features.
-"""
+If asked something outside these facts, explain the limit instead of guessing. Keep simple answers to a few sentences and use bullets for multi-part questions."""
 
 FALLBACK_RESPONSES = {
-    "default": "I'm the Faresense AI Assistant! I can help you understand the Airfare Price Index system, ML forecasting engine, data sources, and all features. What would you like to know?",
-    "apix": "The **Airfare Price Index (APIx)** is a Laspeyres-weighted price index (Base 2024 = 100) that measures real-time domestic airfare inflation across 50+ city-pair corridors. It's designed for MoSPI/RBI monetary policy (Transport CPI sub-group) and DGCA surveillance. A value above 100 means fares are higher than the base period, below 100 means cheaper.",
-    "ml": "The ML Forecasting Engine uses a **RandomForestRegressor** (scikit-learn) trained on historical scraped fares. It predicts fare trajectories across T+1 to T+45 advance purchase horizons. The model achieves R² ≈ 0.94 and MAPE ≈ 1.12%. It powers the predictive fare calendar and citizen booking advisories.",
-    "sms": "The SMS Alert System works in 3 steps: (1) Authenticate via OTP (enter phone → receive 6-digit code → verify). (2) Subscribe to a route (e.g., DEL-BOM) with a price threshold. (3) The ML engine continuously monitors predictions and dispatches automated SMS/WhatsApp alerts when a fare drop is detected below your threshold.",
-    "scraper": "Faresense uses a **Playwright-based hybrid headless browser scraper** that monitors 11 airline portals and OTA aggregators. It enforces ethical scraping: 2-second rate limiting, robots.txt compliance, residential IP rotation, and request header randomization. Data is collected every 15 seconds across all monitored corridors.",
-    "tech": "**Tech Stack:** Python FastAPI backend, SQLite database, scikit-learn (RandomForest) ML engine, Playwright headless browser scraper, HTML/Tailwind CSS/Chart.js/Leaflet frontend. The system features OTP authentication, automated SMS alerts, tax separation (72% base / 28% taxes), and a 45-day predictive fare calendar.",
+        "default": "I can answer verified questions about the index method, forecasts, data ingestion, fare/tax breakdowns, alerts, and APIs. I don't have reliable live fares or answers outside those project facts in offline mode.",
+        "greeting": "Hello! I can help explain this airfare-index prototype, its methodology, forecasts, data ingestion, alerts, and APIs. What would you like to know?",
+        "about": "This is a prototype airfare analytics system. It includes an airfare index, fare forecasting, data-quality and route analytics, fare/tax breakdowns, route alerts, and a FastAPI backend. Its methodology documentation explicitly says it is not an official CPI statistic.",
+        "apix": "The project's airfare index compares a representative fare for each route and period with that route's fare in a configurable base period. The documented default uses medians and normalized route weights with arithmetic aggregation. Some demo weights are synthetic, so this is a research prototype, not an official CPI statistic.",
+        "ml": "The repository describes forecasts across booking horizons T+1 to T+45. It uses a RandomForestRegressor with a polynomial-regression fallback. Forecasts are prototype estimates; I don't have a verified current prediction for a particular route or date here.",
+        "alerts": "The project includes a route-alert workflow with phone OTP authentication and fare-drop subscriptions. Whether an alert can be sent depends on the running backend and its configured notification integrations.",
+        "scraper": "The project includes fare-data ingestion and scraper components for airline and travel-source observations. Active sources and their latest collection status can change; check the dashboard's live collection panel for current status.",
+        "tax": "The dashboard displays fare and tax/fee components separately for transparency. The index fare field is configurable; the documented default fare definition includes mandatory taxes and fees but excludes optional add-ons. The demo breakdown should not be treated as a universal fixed tax share.",
+        "api": "The backend is built with Python and FastAPI, with SQLite used for fare storage. The prototype server's interactive API documentation is available at /docs while that server is running.",
 }
 
 
@@ -746,59 +728,57 @@ class ChatMessageRequest(BaseModel):
 
 @app.post("/api/chat")
 def chat_with_ai(req: ChatMessageRequest):
-    """Gemini-powered AI chatbot endpoint for Faresense project assistant."""
+    """Answer project questions with Gemini when configured, otherwise verified FAQs."""
     user_message = req.message.strip()
     if not user_message:
         return {"status": "success", "reply": FALLBACK_RESPONSES["default"]}
 
-    # Try Gemini API if key is available
     if GEMINI_API_KEY:
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=GEMINI_API_KEY)
-            model = genai.GenerativeModel(
-                "gemini-2.5-flash",
-                system_instruction=FARESENSE_SYSTEM_INSTRUCTION,
-            )
-            response = model.generate_content(user_message)
-            if response and response.text:
-                return {"status": "success", "reply": response.text}
-        except Exception as e:
-            print(f"Gemini SDK attempt note: {e}")
-
-        # REST API fallback
-        try:
             import requests as http_requests
-            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+
+            api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
             payload = {
                 "system_instruction": {"parts": [{"text": FARESENSE_SYSTEM_INSTRUCTION}]},
                 "contents": [{"parts": [{"text": user_message}]}],
             }
-            resp = http_requests.post(api_url, json=payload, timeout=15)
-            if resp.status_code == 200:
-                data = resp.json()
-                text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-                if text:
-                    return {"status": "success", "reply": text}
-            else:
-                print(f"Gemini REST error: {resp.status_code} {resp.text[:200]}")
+            response = http_requests.post(
+                api_url,
+                headers={"x-goog-api-key": GEMINI_API_KEY},
+                json=payload,
+                timeout=20,
+            )
+            response.raise_for_status()
+            candidates = response.json().get("candidates", [])
+            parts = candidates[0].get("content", {}).get("parts", []) if candidates else []
+            answer = "\n".join(part["text"] for part in parts if part.get("text"))
+            if answer:
+                return {"status": "success", "reply": answer}
         except Exception as e:
-            print(f"Gemini REST attempt note: {e}")
+            print(f"Gemini chat unavailable: {type(e).__name__}")
 
-    # Fallback: keyword-based mock responses
-    msg_lower = user_message.lower()
-    if any(kw in msg_lower for kw in ["apix", "index", "price index", "what is"]):
-        return {"status": "success", "reply": FALLBACK_RESPONSES["apix"]}
-    elif any(kw in msg_lower for kw in ["ml", "machine learning", "forecast", "predict", "random forest"]):
-        return {"status": "success", "reply": FALLBACK_RESPONSES["ml"]}
-    elif any(kw in msg_lower for kw in ["sms", "alert", "notification", "otp", "phone"]):
-        return {"status": "success", "reply": FALLBACK_RESPONSES["sms"]}
-    elif any(kw in msg_lower for kw in ["scrap", "data collection", "playwright", "ingestion"]):
-        return {"status": "success", "reply": FALLBACK_RESPONSES["scraper"]}
-    elif any(kw in msg_lower for kw in ["tech", "stack", "architecture", "built with"]):
-        return {"status": "success", "reply": FALLBACK_RESPONSES["tech"]}
+    message = user_message.lower()
+    words = message.replace("-", " ").replace("/", " ").replace(".", " ").replace(",", " ").replace("?", " ").replace("!", " ").split()
+    if words and words[0] in {"hi", "hello", "hey", "greetings"}:
+        intent = "greeting"
+    elif any(term in message for term in ("forecast", "predict", "booking window", "horizon", "machine learning", "random forest")) or "ml" in words:
+        intent = "ml"
+    elif any(term in message for term in ("scrap", "data source", "ingest", "collection", "airline", "ota")):
+        intent = "scraper"
+    elif any(term in message for term in ("tax", "gst", "udf", "surcharge", "fee breakdown", "base fare")):
+        intent = "tax"
+    elif any(term in message for term in ("alert", "notification", "otp", "sms", "subscribe")):
+        intent = "alerts"
+    elif any(term in message for term in ("apix", "price index", "index methodology", "laspeyres", "route weight")):
+        intent = "apix"
+    elif any(term in message for term in ("api", "endpoint", "fastapi", "sqlite", "backend", "architecture", "tech stack")):
+        intent = "api"
+    elif any(term in message for term in ("about this project", "what does this project", "what can you do", "who are you", "dashboard")):
+        intent = "about"
     else:
-        return {"status": "success", "reply": FALLBACK_RESPONSES["default"]}
+        intent = "default"
+
+    return {"status": "success", "reply": FALLBACK_RESPONSES[intent]}
 
 
 # ── Serve built frontend static files ────────────────────────────────────
@@ -812,7 +792,7 @@ async def serve_frontend(request: Request):
     """Serve the built frontend index.html"""
     index_path = Path(__file__).parent / "prototype" / "index.html"
     if index_path.exists():
-        content = index_path.read_text()
+        content = index_path.read_text(encoding="utf-8")
         return HTMLResponse(content=content)
     return HTMLResponse("<h2>Frontend not found in prototype/</h2>", status_code=503)
 
@@ -822,7 +802,7 @@ async def serve_spa(full_path: str, request: Request):
     """Catch-all route for SPA navigation"""
     index_path = Path(__file__).parent / "prototype" / "index.html"
     if index_path.exists():
-        content = index_path.read_text()
+        content = index_path.read_text(encoding="utf-8")
         return HTMLResponse(content=content)
     return HTMLResponse("<h2>Frontend not found in prototype/</h2>", status_code=503)
 

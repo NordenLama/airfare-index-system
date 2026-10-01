@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="api-base-url" content="%VITE_API_BASE_URL%" />
   <title>AirIndex India | Real-Time Fare Analytics Prototype</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -1615,14 +1616,20 @@
   </div>
 
   <script>
-    let dashboardApiBase = '';
+    const configuredApiBase = document.querySelector('meta[name="api-base-url"]')?.content;
+    let dashboardApiBase = configuredApiBase && !configuredApiBase.startsWith('%')
+      ? configuredApiBase.replace(/\/$/, '')
+      : '';
     const _host = window.location.host;
-    if (_host.includes('5500')) {
+    if (!dashboardApiBase && _host.includes('5500')) {
         dashboardApiBase = window.location.protocol + '//' + _host.replace('5500', '8000');
-    } else if (_host.includes('5173')) {
+    } else if (!dashboardApiBase && _host.includes('5173')) {
         dashboardApiBase = window.location.protocol + '//' + _host.replace('5173', '8000');
-    } else if (window.location.port === '5500') {
+    } else if (!dashboardApiBase && window.location.port === '5500') {
         dashboardApiBase = window.location.protocol + '//' + window.location.hostname + ':8000';
+    }
+    if (!dashboardApiBase && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+      console.error('Set VITE_API_BASE_URL to the deployed Render API URL and rebuild the frontend.');
     }
     let currentActiveRoute = 'DEL-BOM';
     let indiaRouteMap;

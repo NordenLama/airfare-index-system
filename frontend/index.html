@@ -2261,9 +2261,9 @@
 
       try {
         indiaRouteMap = L.map('india-route-map', { zoomControl: true, scrollWheelZoom: false }).setView([20.5937, 78.9629], 5);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; OpenStreetMap &copy; CARTO',
-          maxZoom: 10
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+          maxZoom: 19
         }).addTo(indiaRouteMap);
 
         const cityCoordinates = { DEL: [28.5562, 77.1000], BOM: [19.0896, 72.8656], BLR: [13.1986, 77.7066], CCU: [22.6547, 88.4467], MAA: [12.9941, 80.1709], HYD: [17.2403, 78.4294] };
